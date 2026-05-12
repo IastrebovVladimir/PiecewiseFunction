@@ -13,14 +13,16 @@ struct Segment {
 
     Segment() : left(0), right(0), function(nullptr) {}
 
-    Segment(double left, double right, Function<T>* function)
-            : left(left), right(right), function(function ? function->Clone() : nullptr) {
+    Segment(double left, double right, Function<T>* func)
+            : left(left), right(right), function(nullptr) {
         if (left > right) {
             throw std::invalid_argument("Segment: left > right");
         }
-        if (!function) {
+        if (!func) {
             throw std::invalid_argument("Segment: function is nullptr");
         }
+
+        function = func->Clone();
     }
 
     Segment(const Segment& other)
