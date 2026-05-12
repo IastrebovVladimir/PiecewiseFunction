@@ -62,16 +62,22 @@ public:
                 newSegments.Append(current);
             } else if (!inserted) {
                 if (current.left < a) {
-                    newSegments.Append(Segment<T>(current.left, a, current.function->Clone()));
+                    Function<T>* leftFunc = current.function->Clone();
+                    newSegments.Append(Segment<T>(current.left, a, leftFunc));
+                    delete leftFunc;
                 }
                 newSegments.Append(Segment<T>(a, b, function));
                 inserted = true;
                 if (current.right > b) {
-                    newSegments.Append(Segment<T>(b, current.right, current.function->Clone()));
+                    Function<T>* rightFunc = current.function->Clone();
+                    newSegments.Append(Segment<T>(b, current.right, rightFunc));
+                    delete rightFunc;
                 }
             } else {
                 if (current.right > b) {
-                    newSegments.Append(Segment<T>(b, current.right, current.function->Clone()));
+                    Function<T>* rightFunc = current.function->Clone();
+                    newSegments.Append(Segment<T>(b, current.right, rightFunc));
+                    delete rightFunc;
                 }
             }
         }
