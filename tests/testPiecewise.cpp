@@ -50,7 +50,7 @@ TEST(SegmentTest, ContainsBorders) {
     coeffs.Append(2);
 
     auto* f = new PolynomialFunction<int>(coeffs);
-    Segment<int> s(-2.0, 0.0, f));
+    Segment<int> s(-2.0, 0.0, f);
 
     EXPECT_TRUE(s.Contains(-2.0));
     EXPECT_TRUE(s.Contains(0.0));
@@ -99,7 +99,8 @@ TEST(SegmentTest, IncreasingMonotonicity) {
     coeffs.Append(1);
     coeffs.Append(2); // f(x) = 1 + 2x
 
-    Segment<int> s(0.0, 5.0, new PolynomialFunction<int>(coeffs));
+    auto* f = new PolynomialFunction<int>(coeffs);
+    Segment<int> s(0.0, 5.0, f);
     EXPECT_EQ(s.GetMonotonicity(), 2); // возрастает
 }
 
@@ -125,7 +126,7 @@ TEST(PiecewiseTest, EvaluateInsideSegments) {
     auto* f1 = new PolynomialFunction<int>(c1);
     auto* f2 = new PolynomialFunction<int>(c2);
     segments.Append(Segment<int>(0.0, 1.0, f1)); // [0,1]
-    segments.Append(Segment<int>(1.0, 2.0, f2))); // [1,2]
+    segments.Append(Segment<int>(1.0, 2.0, f2)); // [1,2]
 
     PiecewiseFunction<int> pw(segments);
 
