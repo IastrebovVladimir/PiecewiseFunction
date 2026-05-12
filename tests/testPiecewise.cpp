@@ -49,19 +49,23 @@ TEST(SegmentTest, ContainsBorders) {
     coeffs.Append(1);
     coeffs.Append(2);
 
-    Segment<int> s(-2.0, 0.0, new PolynomialFunction<int>(coeffs));
+    auto* f = new PolynomialFunction<int>(coeffs);
+    Segment<int> s(-2.0, 0.0, f));
 
     EXPECT_TRUE(s.Contains(-2.0));
     EXPECT_TRUE(s.Contains(0.0));
     EXPECT_FALSE(s.Contains(1.0));
+
+    delete f;
 }
 
 TEST(SegmentTest, InvalidBordersThrow) {
     MutableArraySequence<int> coeffs;
     coeffs.Append(1);
 
+    auto* f = new PolynomialFunction<int>(coeffs);
     EXPECT_THROW(
-            Segment<int> s(2.0, -1.0, new PolynomialFunction<int>(coeffs)),
+            Segment<int> s(2.0, -1.0, f),
             std::invalid_argument
     );
 }
@@ -78,11 +82,14 @@ TEST(SegmentTest, EvaluateWorks) {
     coeffs.Append(3);
     coeffs.Append(2); // f(x) = 3 + 2x
 
-    Segment<int> s(0.0, 2.0, new PolynomialFunction<int>(coeffs));
+    auto* f = new PolynomialFunction<int>(coeffs);
+    Segment<int> s(0.0, 2.0, f);
 
     EXPECT_EQ(s(0.0), 3);
     EXPECT_EQ(s(1.0), 5);
     EXPECT_EQ(s(2.0), 7);
+
+    delete f;
 }
 
 TEST(SegmentTest, IncreasingMonotonicity) {
@@ -99,8 +106,10 @@ TEST(SegmentTest, DecreasingMonotonicity) {
     coeffs.Append(5);
     coeffs.Append(-3); // f(x) = 5 - 3x
 
-    Segment<int> s(0.0, 5.0, new PolynomialFunction<int>(coeffs));
+    auto* f = new PolynomialFunction<int>(coeffs);
+    Segment<int> s(0.0, 5.0, f);
     EXPECT_EQ(s.GetMonotonicity(), 1); // убывает
+    delete f;
 }
 
 TEST(PiecewiseTest, EvaluateInsideSegments) {
@@ -111,13 +120,18 @@ TEST(PiecewiseTest, EvaluateInsideSegments) {
     c2.Append(2); // f2(x) = 2
 
     MutableArraySequence<Segment<int>> segments;
-    segments.Append(Segment<int>(0.0, 1.0, new PolynomialFunction<int>(c1))); // [0,1]
-    segments.Append(Segment<int>(1.0, 2.0, new PolynomialFunction<int>(c2))); // [1,2]
+    auto* f1 = new PolynomialFunction<int>(c1);
+    auto* f2 = new PolynomialFunction<int>(c2);
+    segments.Append(Segment<int>(0.0, 1.0, f1)); // [0,1]
+    segments.Append(Segment<int>(1.0, 2.0, f2))); // [1,2]
 
     PiecewiseFunction<int> pw(segments);
 
     EXPECT_EQ(pw.Evaluate(0.5), 1);
     EXPECT_EQ(pw.Evaluate(1.5), 2);
+
+    delete f1;
+    delete f2;
 }
 
 TEST(PiecewiseTest, EvaluateExtrapolationWorks) {
@@ -128,13 +142,18 @@ TEST(PiecewiseTest, EvaluateExtrapolationWorks) {
     c2.Append(2); // f2(x) = 2
 
     MutableArraySequence<Segment<int>> segments;
-    segments.Append(Segment<int>(0.0, 1.0, new PolynomialFunction<int>(c1)));
-    segments.Append(Segment<int>(1.0, 2.0, new PolynomialFunction<int>(c2)));
+    auto* f1 = new PolynomialFunction<int>(c1);
+    auto* f2 = new PolynomialFunction<int>(c2);
+    segments.Append(Segment<int>(0.0, 1.0, f1));
+    segments.Append(Segment<int>(1.0, 2.0, f2));
 
     PiecewiseFunction<int> pw(segments);
 
     EXPECT_EQ(pw.EvaluateExtrapolation(-1.0), 1); // вычисление f1 за пределами области
     EXPECT_EQ(pw.EvaluateExtrapolation(3.0), 2);  // вычисление f2 за пределами области
+
+    delete f1;
+    delete f2;
 }
 
 TEST(PiecewiseTest, IncreasingMonotonicity) {
@@ -147,11 +166,16 @@ TEST(PiecewiseTest, IncreasingMonotonicity) {
     c2.Append(1); // g(x) = 1 + x
 
     MutableArraySequence<Segment<int>> segments;
-    segments.Append(Segment<int>(0.0, 1.0, new PolynomialFunction<int>(c1)));
-    segments.Append(Segment<int>(1.0, 2.0, new PolynomialFunction<int>(c2)));
+    auto* f1 = new PolynomialFunction<int>(c1);
+    auto* f2 = new PolynomialFunction<int>(c2);
+    segments.Append(Segment<int>(0.0, 1.0, f1));
+    segments.Append(Segment<int>(1.0, 2.0, f2));
 
     PiecewiseFunction<int> pw(segments);
     EXPECT_EQ(pw.CheckMonotonicity(), 2);
+
+    delete f1;
+    delete f2;
 }
 
 TEST(PiecewiseTest, RedefineMiddleSegment) {
@@ -162,7 +186,8 @@ TEST(PiecewiseTest, RedefineMiddleSegment) {
     c2.Append(2); // g(x) = 2 на [1,2]
 
     MutableArraySequence<Segment<int>> segments;
-    segments.Append(Segment<int>(0.0, 3.0, new PolynomialFunction<int>(c1)));
+    auto* f1 = new PolynomialFunction<int>(c1);
+    segments.Append(Segment<int>(0.0, 3.0, f1));
 
     PiecewiseFunction<int> pw(segments);
     PolynomialFunction<int> replacement(c2);
@@ -173,6 +198,8 @@ TEST(PiecewiseTest, RedefineMiddleSegment) {
     EXPECT_EQ(pw.Evaluate(0.5), 1);
     EXPECT_EQ(pw.Evaluate(1.5), 2);
     EXPECT_EQ(pw.Evaluate(2.5), 1);
+
+    delete f1;
 }
 
 TEST(RationalFunctionTest, EvaluateWorks) {
