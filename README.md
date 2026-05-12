@@ -38,7 +38,7 @@ g++ -g -O0 -std=c++20 main_spline.cpp Lab_2/types.cpp -o SplineInterpolation
 ```
 
 
-
+```text
 PiecewiseFunction/
 ├─ Lab_2                  # Последовательность (из ЛР2, ArraySequence.h, types.h, types.cpp)
 ├─ Segment.h              # Один отрезок кусочно-заданной функции [left, right]  указатель на Function<T>
