@@ -68,6 +68,8 @@ TEST(SegmentTest, InvalidBordersThrow) {
             Segment<int> s(2.0, -1.0, f),
             std::invalid_argument
     );
+
+    delete f;
 }
 
 TEST(SegmentTest, NullptrFunctionThrows) {
