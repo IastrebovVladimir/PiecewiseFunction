@@ -92,7 +92,7 @@ PiecewiseFunction<T> BuildNaturalCubicSpline(
         coeffs.Append(A2);
         coeffs.Append(A3);
 
-        auto* f = new PolynomialFunction<int>(coeffs);
+        auto* f = new PolynomialFunction<T>(coeffs);
         segments.Append(Segment<T>(xs.Get(index), xs.Get(index + 1), f));
         delete f;
     }
