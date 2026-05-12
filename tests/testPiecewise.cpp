@@ -102,6 +102,8 @@ TEST(SegmentTest, IncreasingMonotonicity) {
     auto* f = new PolynomialFunction<int>(coeffs);
     Segment<int> s(0.0, 5.0, f);
     EXPECT_EQ(s.GetMonotonicity(), 2); // возрастает
+
+    delete f;
 }
 
 TEST(SegmentTest, DecreasingMonotonicity) {
