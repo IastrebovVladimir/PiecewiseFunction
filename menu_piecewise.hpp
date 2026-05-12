@@ -113,8 +113,8 @@ void case_enter_piecewise(PiecewiseFunction<T>*& function,
         }
 
         Function<T>* funcOnSegment = ReadFunction<T>(t);
-
         segments.Append(Segment<T>(left, right, funcOnSegment));
+        delete funcOnSegment;
     }
 
     function = new PiecewiseFunction<T>(segments);
@@ -186,8 +186,8 @@ void case_redefine_piecewise(PiecewiseFunction<T>* function,
 
     std::cout << "Enter replacement function:\n";
     Function<T>* funcOnSegment = ReadFunction<T>(t);
-
     function->Redefine(a, b, funcOnSegment);
+    delete funcOnSegment;
     std::cout << "Function redefined on [" << a << ", " << b << "].\n";
 }
 
