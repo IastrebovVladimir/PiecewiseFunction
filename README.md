@@ -11,7 +11,7 @@
 
 ```bash
 cd ~
-git clone https://github.com/IastrebovVladimir/Sequence.git
+git clone https://github.com/IastrebovVladimir/PiecewiseFunction.git
 cd PiecewiseFunction
 git clone https://github.com/google/googletest.git
 ```
@@ -19,7 +19,7 @@ git clone https://github.com/google/googletest.git
 ## Запуск тестов
 
 ```bash
-g++ -g -O0 -std=c++20 tests/testMain.cpp tests/testPiecewise.cpp tests/testsInterpolation.cpp -I. -isystem googletest/googletest/include -Igoogletest/googletest googletest/googletest/src/gtest-all.cc -pthread -o PiecewiseTests
+g++ -g -O0 -std=c++20 tests/testMain.cpp tests/testMain.cpp tests/testPiecewise.cpp tests/testsInterpolation.cpp -I. -isystem googletest/googletest/include -Igoogletest/googletest googletest/googletest/src/gtest-all.cc -pthread -o PiecewiseTests
 ./PiecewiseTests
 ```
 
