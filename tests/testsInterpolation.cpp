@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "../Lab_2/ArraySequence.h"
-#include "../SpliteInterpolation.h"
+#include "../Functions/SpliteInterpolation.h"
 
 // y = x
 TEST(SplineTest, LinearTwoPoints) {
