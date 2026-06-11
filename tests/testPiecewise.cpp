@@ -3,7 +3,7 @@
 #include "../Lab_2/ArraySequence.h"
 #include "../Functions/PolynomialFunction.h"
 #include "../Segment.h"
-#include "../functions/PiecewiseFunction.h"
+#include "../Functions/PiecewiseFunction.h"
 
 TEST(SeqmentTest, DerivativeWorks) {
     MutableArraySequence<int> coeffs;
