@@ -1,38 +1,30 @@
 #ifndef LAB_3_SEGMENT_H
 #define LAB_3_SEGMENT_H
 
+#include <memory>
 #include <stdexcept>
 #include <cmath>
-#include "Function.h"
+#include "Functions/Function.h"
 
 template<typename T>
 struct Segment {
     double left;
     double right;
-    Function<T>* function;
+    std::unique_ptr<Function<T>> function;
 
     Segment() : left(0), right(0), function(nullptr) {}
 
-    Segment(double left, double right, Function<T>* func)
-            : left(left), right(right), function(nullptr) {
+    Segment(double left, double right, const Function<T>& function)
+            : left(left), right(right), function(function.Clone()) {
         if (left > right) {
             throw std::invalid_argument("Segment: left > right");
         }
-        if (!func) {
-            throw std::invalid_argument("Segment: function is nullptr");
-        }
-
-        function = func->Clone();
     }
 
-    Segment(const Segment& other)
-            : left(other.left),
-              right(other.right),
-              function(other.function ? other.function->Clone() : nullptr) {}
+    Segment(const Segment& other) : left(other.left), right(other.right), function(other.function ? other.function->Clone() : nullptr) {}
 
     Segment& operator=(const Segment& other) {
         if (this != &other) {
-            delete function;
             left = other.left;
             right = other.right;
             function = other.function ? other.function->Clone() : nullptr;
@@ -40,9 +32,9 @@ struct Segment {
         return *this;
     }
 
-    ~Segment() {
-        delete function;
-    }
+    Segment(Segment&&) noexcept = default;
+    Segment& operator=(Segment&&) noexcept = default;
+    ~Segment() = default;
 
     bool Contains(double x) const {
         return x >= left && x <= right;
@@ -66,7 +58,8 @@ struct Segment {
 
         bool hasPositive = false;
         bool hasNegative = false;
-        Function<T>* diff = function->Derivative();
+
+        auto diff = function->Derivative();
 
         double h = (right - left) / steps;
 
@@ -86,12 +79,9 @@ struct Segment {
             }
 
             if (hasPositive && hasNegative) {
-                delete diff;
                 return 0;
             }
         }
-
-        delete diff;
 
         if (hasNegative && !hasPositive) {
             return 1;
