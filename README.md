@@ -33,7 +33,7 @@ g++ -g -O0 -std=c++20 menu/main_piecewise.cpp Lab_2/types.cpp -o Lab3
 ## Запуск сплайн-интерполяции
 
 ```bash
-g++ -g -O0 -std=c++20 main_spline.cpp Lab_2/types.cpp -o SplineInterpolation
+g++ -g -O0 -std=c++20 spline_menu/main_spline.cpp Lab_2/types.cpp -o SplineInterpolation
 ./SplineInterpolation
 ```
 
