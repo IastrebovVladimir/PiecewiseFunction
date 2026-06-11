@@ -26,7 +26,7 @@ g++ -g -O0 -std=c++20 tests/testMain.cpp tests/testMain.cpp tests/testPiecewise.
 ## Запуск кусочно-заданной функции
 
 ```bash
-g++ -g -O0 -std=c++20 main_piecewise.cpp Lab_2/types.cpp -o Lab3
+g++ -g -O0 -std=c++20 menu/main_piecewise.cpp Lab_2/types.cpp -o Lab3
 ./Lab3
 ```
 
