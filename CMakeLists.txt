@@ -1,11 +1,14 @@
-cmake_minimum_required(VERSION 3.22)
-project(Lab_4)
+cmake_minimum_required(VERSION 3.29)
+project(Lab_3)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Lab_4
-        menu/main_menu_lazy.cpp
-        Sequence/types.cpp
+add_executable(Lab3 menu/main_piecewise.cpp
+        Lab_2/types.cpp
+)
+
+add_executable(SplineInterpolation spline_menu/main_spline.cpp
+        Lab_2/types.cpp
 )
 
 include(FetchContent)
@@ -19,19 +22,16 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_executable(LazyTests
+add_executable(PiecewiseTests
         tests/testMain.cpp
-        tests/testLazy.cpp
-        tests/testGenerator.cpp
-        tests/testStreams.cpp
-        tests/testMachines.cpp
-        tests/testTransfinite.cpp
+        tests/testPiecewise.cpp
+        tests/testsInterpolation.cpp
 )
 
-target_link_libraries(LazyTests
+target_link_libraries(PiecewiseTests
         PRIVATE
         GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(LazyTests)
+gtest_discover_tests(PiecewiseTests)
