@@ -4,3 +4,12 @@
 Есть набор узлов: ${(x_0, y_0) < (x_1, y_1) < \dots < (x_{n-1}, y_{n-1})}$, где ${x_i \in \mathbb{R}, y_i \in T}$
 
 В функции ```ValidateSplineInput``` проверяется, что число точек совпадает и ${n ≥ 2}$, и узлы строго упорядочены ${x_0 < x_1 < \dots < x_{n-1}, y_{n-1}}$.
+## 2. Шаги сетки ${h_i}$
+Cчитаем шаги сетки: ${h_i = x_{i+1} - x_i}$, где ${i = 0,\dots, n-1}$
+```text
+MutableArraySequence<double> h;
+for (int index = 0; index < n - 1; index++) {
+    h.Append(xs.Get(index + 1) - xs.Get(index));
+}
+```
+## 3. Правая часть системы: вектор ${α}$:
