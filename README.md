@@ -40,25 +40,34 @@ g++ -g -O0 -std=c++20 spline_menu/main_spline.cpp Lab_2/types.cpp -o SplineInter
 
 ```text
 PiecewiseFunction/
-├─ Lab_2                  # Последовательность (из ЛР2, ArraySequence.h, types.h, types.cpp)
-├─ Segment.h              # Один отрезок кусочно-заданной функции [left, right]  указатель на Function<T>
-├─ PiecewiseFunction.h    # Класс PiecewiseFunction<T> и операции с кусочно-заданной функцией
-├─ PolynomialFunction.h   # Полиномная функция
-├─ RationalFunction.h     # Рациональная функция
-├─ SpliteInterpolation.h  # Кубический сплайн/интерполяция
-├─ Function.h             # Интерфейс Function<T>(double x) → T
-├─ Complex.h              # Тип комплексного числа
-├─ Read.h                 # Функции ввода
-├─ menu_piecewise.h       # Объявления меню для кусочно-заданных функций
-├─ menu_piecewise.hpp     # Реализация меню для кусочно-заданных функций
-├─ spline_menu.h          # Объявления меню для сплайн-интерполяции
-├─ spline_menu.hpp        # Реализация меню для сплайн-интерполяции
-├─ main_piecewise.cpp     # Консольный интерфейс (кусочная функция)
-├─ main_spline.cpp        # Консольный интерфейс (сплайн-интерполяция)
-├─ CMakeLists.txt         # Конфигурация сборки CMake
-└─ tests/
-   ├─ testMain.cpp        # Запуск тестов 
-   ├─ testSegment.cpp     # Тесты Segment<T>
-   ├─ testPiecewise.cpp   # Тесты PiecewiseFunction<T>
-   └─ testSpline.cpp      # Тесты SplineInterpolation
+├─ Functions/
+│  ├─ Function.h             # Интерфейс Function<T>(double x) → T
+│  ├─ PiecewiseFunction.h    # Класс PiecewiseFunction<T> и операции с кусочно-заданной функцией
+│  ├─ PolynomialFunction.h   # Полиномная функция
+│  ├─ RationalFunction.h     # Рациональная функция
+│  ├─ SpliteInterpolation.h  # Кубический сплайн/интерполяция
+│  ├─ Complex.h              # Тип комплексного числа
+│  ├─ Segment.h              # Один отрезок кусочно-заданной функции [left, right]  указатель на Function<T>
+│  └─ Read.h                 # Функции ввода
+│
+├─ Lab_2                     # Последовательность (из ЛР2, ArraySequence.h, types.h, types.cpp)
+│                    
+├─ menu/
+│  ├─ main_piecewise.cpp     # Консольный интерфейс (кусочная функция)
+│  ├─ menu_piecewise.h       # Объявления меню для кусочно-заданных функций
+│  ├─ menu_piecewise.hpp     # Реализация меню для кусочно-заданных функций
+│  └─ menu_plot.hpp
+├─ spline_menu/
+│  ├─ main_spline.cpp        # Консольный интерфейс (сплайн-интерполяция)
+│  ├─ spline_menu.h          # Объявления меню для сплайн-интерполяции
+│  └─ spline_menu.hpp        # Реализация меню для сплайн-интерполяции
+├─ tests/
+│  ├─ testMain.cpp           # Запуск тестов 
+│  ├─ testSegment.cpp        # Тесты Segment<T>
+│  ├─ testPiecewise.cpp      # Тесты PiecewiseFunction<T>
+│  └─ testSpline.cpp         # Тесты SplineInterpolation
+├─ CMakeLists.txt            # Конфигурация сборки CMake
+└─ .github/
+   └─ workflows/
+      └─ ci.yml              # Установка gnuplot
 ```
