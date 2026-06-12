@@ -61,11 +61,35 @@ for (int index = 1; index < n - 1; index++) {
 z.Append(0.0);
 ```
 ## 5. Нахождение ${a_i, b_i, c_i, d_i}$
-### ВАЖНО: Здесь ${a_i, b_i, d_i}$ это уже коэффициенты кубического сплайна при ${(x-x_i)^0}$, ${(x-x_i)}$ и ${(x-x_i)^3}$ соответственно, а не элементы диагоналей из трёхдиагональной системы в пункте 4.
-Для каждого отрезка {[x_i, x_{i+1}]} при i = ${i = n - 2,\dots, 0}$:
+### ВАЖНО: Здесь ${a_i, b_i, c_i, d_i}$ это уже коэффициенты кубического сплайна при ${(x-x_i)^0}$, ${(x-x_i)}$, ${(x-x_i)^2}$ и ${(x-x_i)^3}$ соответственно, а не элементы диагоналей из трёхдиагональной системы в пункте 4.
+Для каждого отрезка {[x_i, x_{i+1}]} при i = ${i = n - 2,\dots, 0}$:\
 ${a_i = y_i}$,\
-${c_i = z_i - μ_ic_{i+1}}$ - решение трехдиагональной системы, ${c_i}$ - коэффициент при ${(x-x_i)^3}$,\
+${c_i = z_i - μ_ic_{i+1}}$ - решение трехдиагональной системы, ${c_i}$ - коэффициент при ${(x-x_i)^2}$,\
 ${b_i = \frac{y_{i+1} - y_i}{h_i} - \frac{h_i}{3}(2c_i + c_{i+1})}$,\
 ${d_i = \frac{c_{i+1} - c_i}{3h_i}}$.
-​
+
+```text
+MutableArraySequence<T> c;
+for (int index = 0; index < n; index++) {
+    c.Append(0.0);
+}
+
+MutableArraySequence<T> b;
+MutableArraySequence<T> d;
+MutableArraySequence<T> a;
+
+for (int index = 0; index < n - 1; index++) {
+    a.Append(ys.Get(index));
+    b.Append(0.0);
+    d.Append(0.0);
+}
+
+for (int index = n - 2; index >= 0; index--) {
+    c.Set(index, z.Get(index) - mu.Get(index) * c.Get(index + 1));
+    b.Set(index,
+          (ys.Get(index + 1) - ys.Get(index)) / h.Get(index) -
+          h.Get(index) * (c.Get(index + 1) + 2.0 * c.Get(index)) / 3.0);
+    d.Set(index, (c.Get(index + 1) - c.Get(index)) / (3.0 * h.Get(index)));
+}
+​```
 
