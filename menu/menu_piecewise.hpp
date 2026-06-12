@@ -113,7 +113,7 @@ void run_piecewise_menu(const TypeInfo* t) {
             std::cout << "5. Check Continuity\n";
             std::cout << "6. Check Monotonicity\n";
             std::cout << "7. Clear PiecewiseFunction\n";
-            std::cout << "8. Plot Menu\n";
+            std::cout << "8. Show plot\n";
             std::cout << "0. Exit\n";
         }
 
