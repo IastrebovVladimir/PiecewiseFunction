@@ -5,7 +5,7 @@
 
 В функции ```ValidateSplineInput``` проверяется, что число точек совпадает и ${n ≥ 2}$, и узлы строго упорядочены ${x_0 < x_1 < \dots < x_{n-1}, y_{n-1}}$.
 ## 2. Шаги сетки ${h_i}$
-Cчитаем шаги сетки: ${h_i = x_{i+1} - x_i}$, где ${i = 0,\dots, n - 2}$
+Cчитаем шаги сетки: ${h_i = x_{i+1} - x_i}$, при ${i = 0,\dots, n - 2}$
 ```text
 MutableArraySequence<double> h;
 for (int index = 0; index < n - 1; index++) {
@@ -28,7 +28,7 @@ for (int index = 1; index < n - 1; index++) {
 alpha.Append(0);
 ```
 ## 4. Трёхдиагональная система и метод прогонки
-Это реализация метода Томаса (прогонки) для решения трёхдиагональной системы вида:\
+Это реализация метода Томаса (прогонки) для решения трёхдиагональной системы вида при ${i = 0,\dots, n - 1}$:\
 ${a_ic_{i-1} + b_ic_i + d_ic_{i+1} = α_i}$, ${a_i}$ - поддиагональ, ${b_i}$ - главная диагональ, ${d_i}$ - наддиагональ. ${c_i}$ - неизвестные трехдиагольнаьной системы\
 ${a_i = h_{i-1}}$,\
 ${b_i = 2(h_{i-1} + h_i)}$,\
@@ -91,4 +91,39 @@ for (int index = n - 2; index >= 0; index--) {
           h.Get(index) * (c.Get(index + 1) + 2.0 * c.Get(index)) / 3.0);
     d.Set(index, (c.Get(index + 1) - c.Get(index)) / (3.0 * h.Get(index)));
 }
-​```
+```
+## 6. Формирование кусочно полиномиальной функции ${S(x)}$
+Локальный кубический сплайн на промежутке ${[x_i, x_{i+1}]}$ при ${i = 1, \dots, n - 2}$.\
+${S_i(x) = a_i + b_i(x-x_i) + c_i(x-x_i)^2 + d_i(x-x_i)^3}$.\
+Или же:
+${S_i(x) = A_{0,i} + A_{1,i}(x-x_i) + A_{2,i}(x-x_i)^2 + A_{3,i}(x-x_i)^3}$.\
+Коэффициенты выражаются через ${a_i, b_i, c_i, d_i}$:
+${A_{0,i} = a_i - b_ix_i + c_ix_i^2 - d_ix_i^3}$,\
+${A_{1,i} = b_i - 2c_ix_i + 3d_ix_i^2}$,\
+${A_{2,i} = c_i - 3d_ix_i}$,\
+${A_{3,i} = d_i}$\.
+
+```text
+MutableArraySequence<Segment<T>> segments;
+
+for (int index = 0; index < n - 1; index++) {
+    double x0 = xs.Get(index);
+
+    T A0 = a.Get(index) - b.Get(index) * x0 + c.Get(index) * x0 * x0 - d.Get(index) * x0 * x0 * x0;
+    T A1 = b.Get(index) - 2.0 * c.Get(index) * x0 + 3.0 * d.Get(index) * x0 * x0;
+    T A2 = c.Get(index) - 3.0 * d.Get(index) * x0;
+    T A3 = d.Get(index);
+
+    MutableArraySequence<T> coeffs;
+    coeffs.Append(A0);
+    coeffs.Append(A1);
+    coeffs.Append(A2);
+    coeffs.Append(A3);
+
+    PolynomialFunction<T> function(coeffs);
+    segments.Append(Segment<T>(xs.Get(index), xs.Get(index + 1), function));
+}
+```
+
+## Итоговый кубический спайнлайн:\
+${S(x) = S_i(x)}$ при ${x \in [x_i, x_{i+1}]}$, при ${i = 0,\dots, n - 2}$
