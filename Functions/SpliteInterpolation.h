@@ -47,20 +47,20 @@ PiecewiseFunction<T> BuildNaturalCubicSpline(const MutableArraySequence<double>&
     mu.Append(0.0);
     z.Append(0.0);
 
-    for (int i = 1; i < n - 1; ++i) {
-        double ai = h.Get(i - 1);
-        double bi = 2.0 * (h.Get(i - 1) + h.Get(i));
-        double сi = h.Get(i);
+    for (int index = 1; index < n - 1; index++) {
+        double ai = h.Get(index - 1);
+        double bi = 2.0 * (h.Get(index - 1) + h.Get(index));
+        double di = h.Get(index);
 
-        double Li = bi - ai * mu.Get(i - 1);
-        mu.Append(сi / Li);
-        z.Append((alpha.Get(i) - ai * z.Get(i - 1)) / Li);
+        double Li = bi - ai * mu.Get(index - 1);
+        mu.Append(di / Li);
+        z.Append((alpha.Get(index) - ai * z.Get(index - 1)) / Li);
     }
 
     z.Append(0.0);
 
     MutableArraySequence<T> c;
-    for (int i = 0; i < n; ++i) {
+    for (int index = 0; index < n; index++) {
         c.Append(0.0);
     }
 
@@ -68,29 +68,29 @@ PiecewiseFunction<T> BuildNaturalCubicSpline(const MutableArraySequence<double>&
     MutableArraySequence<T> d;
     MutableArraySequence<T> a;
 
-    for (int i = 0; i < n - 1; ++i) {
-        a.Append(ys.Get(i));
+    for (int index = 0; index < n - 1; index++) {
+        a.Append(ys.Get(index));
         b.Append(0.0);
         d.Append(0.0);
     }
 
-    for (int i = n - 2; i >= 0; --i) {
-        c.Set(i, z.Get(i) - mu.Get(i) * c.Get(i + 1));
+    for (int index = n - 2; index >= 0; index--) {
+        c.Set(index, z.Get(index) - mu.Get(index) * c.Get(index + 1));
         b.Set(i,
-              (ys.Get(i + 1) - ys.Get(i)) / h.Get(i) -
-              h.Get(i) * (c.Get(i + 1) + 2.0 * c.Get(i)) / 3.0);
-        d.Set(i, (c.Get(i + 1) - c.Get(i)) / (3.0 * h.Get(i)));
+              (ys.Get(index + 1) - ys.Get(index)) / h.Get(index) -
+              h.Get(index) * (c.Get(index + 1) + 2.0 * c.Get(index)) / 3.0);
+        d.Set(index, (c.Get(index + 1) - c.Get(index)) / (3.0 * h.Get(index)));
     }
 
     MutableArraySequence<Segment<T>> segments;
 
-    for (int i = 0; i < n - 1; ++i) {
-        double x0 = xs.Get(i);
+    for (int index = 0; index < n - 1; index++) {
+        double x0 = xs.Get(index);
 
-        T A0 = a.Get(i) - b.Get(i) * x0 + c.Get(i) * x0 * x0 - d.Get(i) * x0 * x0 * x0;
-        T A1 = b.Get(i) - 2.0 * c.Get(i) * x0 + 3.0 * d.Get(i) * x0 * x0;
-        T A2 = c.Get(i) - 3.0 * d.Get(i) * x0;
-        T A3 = d.Get(i);
+        T A0 = a.Get(index) - b.Get(index) * x0 + c.Get(index) * x0 * x0 - d.Get(index) * x0 * x0 * x0;
+        T A1 = b.Get(index) - 2.0 * c.Get(index) * x0 + 3.0 * d.Get(index) * x0 * x0;
+        T A2 = c.Get(index) - 3.0 * d.Get(index) * x0;
+        T A3 = d.Get(index);
 
         MutableArraySequence<T> coeffs;
         coeffs.Append(A0);
@@ -99,7 +99,7 @@ PiecewiseFunction<T> BuildNaturalCubicSpline(const MutableArraySequence<double>&
         coeffs.Append(A3);
 
         PolynomialFunction<T> function(coeffs);
-        segments.Append(Segment<T>(xs.Get(i), xs.Get(i + 1), function));
+        segments.Append(Segment<T>(xs.Get(index), xs.Get(index + 1), function));
     }
 
     return PiecewiseFunction<T>(segments);
