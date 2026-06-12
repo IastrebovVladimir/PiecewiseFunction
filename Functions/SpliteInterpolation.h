@@ -50,10 +50,10 @@ PiecewiseFunction<T> BuildNaturalCubicSpline(const MutableArraySequence<double>&
     for (int i = 1; i < n - 1; ++i) {
         double ai = h.Get(i - 1);
         double bi = 2.0 * (h.Get(i - 1) + h.Get(i));
-        double ci = h.Get(i);
+        double di = h.Get(i);
 
         double Li = bi - ai * mu.Get(i - 1);
-        mu.Append(ci / Li);
+        mu.Append(di / Li);
         z.Append((alpha.Get(i) - ai * z.Get(i - 1)) / Li);
     }
 
