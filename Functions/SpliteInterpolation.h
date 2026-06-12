@@ -76,7 +76,7 @@ PiecewiseFunction<T> BuildNaturalCubicSpline(const MutableArraySequence<double>&
 
     for (int index = n - 2; index >= 0; index--) {
         c.Set(index, z.Get(index) - mu.Get(index) * c.Get(index + 1));
-        b.Set(i,
+        b.Set(index,
               (ys.Get(index + 1) - ys.Get(index)) / h.Get(index) -
               h.Get(index) * (c.Get(index + 1) + 2.0 * c.Get(index)) / 3.0);
         d.Set(index, (c.Get(index + 1) - c.Get(index)) / (3.0 * h.Get(index)));
