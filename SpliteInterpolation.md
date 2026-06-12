@@ -5,7 +5,7 @@
 
 В функции ```ValidateSplineInput``` проверяется, что число точек совпадает и ${n ≥ 2}$, и узлы строго упорядочены ${x_0 < x_1 < \dots < x_{n-1}, y_{n-1}}$.
 ## 2. Шаги сетки ${h_i}$
-Cчитаем шаги сетки: ${h_i = x_{i+1} - x_i}$, где ${i = 0,\dots, n - 2}$ (далее h_
+Cчитаем шаги сетки: ${h_i = x_{i+1} - x_i}$, где ${i = 0,\dots, n - 2}$
 ```text
 MutableArraySequence<double> h;
 for (int index = 0; index < n - 1; index++) {
@@ -32,7 +32,7 @@ alpha.Append(0);
 ${a_ic_{i-1} + b_ic_i + d_ic_{i+1} = α_i}$, ${a_i}$ - поддиагональ, ${b_i}$ - главная диагональ, ${d_i}$ - наддиагональ. ${c_i}$ - неизвестные трехдиагольнаьной системы\
 ${a_i = h_{i-1}}$,\
 ${b_i = 2(h_{i-1} + h_i)}$,\
-${c_i = h_i}$.
+${d_i = h_i}$.
 
 Прямой ход:\
 Задаём начальные значения: ${μ_0 = 0, z_0 = 0}$;\
@@ -41,4 +41,26 @@ ${L_i = b_i - a_iμ_{i-1}}$,\
 ${μ_i = \frac{d_i}{L_i}}$,\
 ${z_i = \frac{α_i - a_iz_{i-1}}{L_i}}$.\
 На правом конце: ${z_{n-1} = 0}$.
+```text
+MutableArraySequence<double> mu;
+MutableArraySequence<T> z;
+
+mu.Append(0.0);
+z.Append(0.0);
+
+for (int index = 1; index < n - 1; index++) {
+    double ai = h.Get(index - 1);
+    double bi = 2.0 * (h.Get(index - 1) + h.Get(index));
+    double di = h.Get(index);
+
+    double Li = bi - ai * mu.Get(index - 1);
+    mu.Append(di / Li);
+    z.Append((alpha.Get(index) - ai * z.Get(index - 1)) / Li);
+}
+
+z.Append(0.0);
+```
+## 5. Нахождение ${b_i, c_i, d_i}$
+### ВАЖНО: Здесь ${b_i, d_i}$ это уже коэффициенты кубического сплайна при (x-x_i) и (x-x_i)^3 соответственно, а не элементы диагоналей из трёхдиагональной системы в пункте 4. 
+​
 
