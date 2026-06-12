@@ -92,4 +92,3 @@ for (int index = n - 2; index >= 0; index--) {
     d.Set(index, (c.Get(index + 1) - c.Get(index)) / (3.0 * h.Get(index)));
 }
 ​```
-
